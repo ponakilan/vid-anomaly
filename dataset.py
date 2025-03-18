@@ -22,9 +22,10 @@ class ImageDataset(Dataset):
 
         self.seq_len = seq_len
         self.max_frames = max_frames
-
+        
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.processor = ViTImageProcessor.from_pretrained('google/vit-base-patch16-224-in21k')
-        self.model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k')
+        self.model = ViTModel.from_pretrained('google/vit-base-patch16-224-in21k').to(self.device)
 
     def __len__(self):
         return (len(self.files) * self.max_frames) // self.seq_len
@@ -43,6 +44,7 @@ class ImageDataset(Dataset):
             images=[Image.open(f"{base_path}/{file}").convert('L').convert('RGB') for file in files], 
             return_tensors="pt"
         )
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
         outputs = self.model(**inputs)
         last_hidden_states = outputs.last_hidden_state
         encoding = last_hidden_states[:, 0, :]
