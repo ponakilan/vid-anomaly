@@ -1,17 +1,20 @@
 import os
 import math
+import pickle
 
 import torch
 from torchvision import datasets
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 
-from transformers import ViTImageProcessor, ViTModel
-
 from PIL import Image
+from transformers import ViTImageProcessor, ViTModel
 
 
 class ImageDataset(Dataset):
+    """
+    Calculates embeddings for a sequence of frames using google/vit-base-patch16-224-in21k.
+    """
     def __init__(self, root_dir: str, seq_len: int = 10, max_frames: int = 200):
         self.root_dir = root_dir
         self.files = sorted(list(os.walk(self.root_dir)), key=lambda x: x[0])[1:]
@@ -55,3 +58,18 @@ class ImageDataset(Dataset):
         base_path = self.files[directory][0]
         files = self.files[directory][2][start:end]
         return self._load_frames(base_path, files)
+
+
+class EmbeddingDataset(Dataset):
+    """
+    Retrieves pre-computed embeddings from a pickle file.
+    """
+    def __init__(self, embeddings_path: str):
+        with open(embeddings_path, "rb") as embeddings_file:
+            self.embeddings = pickle.load(embeddings_file)
+        
+    def __len__(self):
+        return len(self.embeddings)
+    
+    def __getitem__(self, index: int):
+        return torch.tensor(self.embeddings[index])

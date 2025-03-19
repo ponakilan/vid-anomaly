@@ -1,10 +1,11 @@
-from dataset import ImageDataset
-
-dataset = ImageDataset(root_dir="data/UCSDped1/Train")
-print(dataset[12].shape)
-
 import tqdm
 import pickle
+from dataset import ImageDataset
+
+dataset = ImageDataset(
+    root_dir="data/UCSDped1/Train",
+    seq_len=50
+)
 
 embeddings = []
 for i in tqdm.tqdm(range(len(dataset))):
