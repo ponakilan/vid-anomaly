@@ -3,9 +3,7 @@ import math
 import pickle
 
 import torch
-from torchvision import datasets
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
+from torch.utils.data import Dataset
 
 from PIL import Image
 from transformers import ViTImageProcessor, ViTModel
