@@ -15,14 +15,15 @@ class MultiScaleTemporalAttention(nn.Module):
         outputs = []
 
         for i, window_size in enumerate(self.scales):
+            attn_device = next(self.attention_layers[i].parameters()).device
             if window_size >= T:
-                q = k = v = x.transpose(0, 1)
+                q = k = v = x.transpose(0, 1).to(attn_device)
                 attn_output, _ = self.attention_layers[i](q, k, v)
                 outputs.append(attn_output.transpose(0, 1))
             else:
                 local_outputs = []
                 for start in range(T - window_size + 1):
-                    chunk = x[:, start:start + window_size, :]
+                    chunk = x[:, start:start + window_size, :].to(attn_device)
                     q = k = v = chunk.transpose(0, 1)
                     attn_output, _ = self.attention_layers[i](q, k, v)
                     local_outputs.append(attn_output.mean(0))
