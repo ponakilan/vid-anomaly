@@ -8,6 +8,10 @@ from dataset import ImageDataset, EmbeddingDataset, ImageEmbeddingDataset
 root_dir = "data/UCSDped1/Train"
 seq_len = 50
 
+device = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
+
 image_dataset = ImageDataset(
     root_dir=root_dir,
     seq_len=seq_len
@@ -23,7 +27,7 @@ dataset = ImageEmbeddingDataset(
 dataloader = DataLoader(dataset, batch_size=5)
 
 
-model = FrameReconstructionModel()
+model = FrameReconstructionModel().to(device)
 
 loss_fn = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -35,6 +39,7 @@ def train_one_epoch():
 
     for i, data in tqdm(enumerate(dataloader)):
         inputs, labels = data
+        input, labels = inputs.to(device), labels.to(device)
 
         optimizer.zero_grad()
 
