@@ -5,14 +5,14 @@ from torch import nn
 
 
 class FrameReconstructionModel(nn.Module):
-    def __init__(self):
+    def __init__(self, device):
         super(FrameReconstructionModel, self).__init__()
         self.attn = MultiScaleTemporalAttention(
             embed_dim=768,
             num_heads=4,
             scales=[10, 20, 40, 50]
-        )
-        self.reconstructor = CNNFrameReconstructor()
+        ).to(device)
+        self.reconstructor = CNNFrameReconstructor().to(device)
 
     def forward(self, x):
         x = self.attn(x)

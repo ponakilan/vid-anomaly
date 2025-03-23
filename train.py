@@ -27,7 +27,7 @@ dataset = ImageEmbeddingDataset(
 dataloader = DataLoader(dataset, batch_size=12)
 
 
-model = FrameReconstructionModel().to(device)
+model = FrameReconstructionModel(device=device).to(device)
 
 loss_fn = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
