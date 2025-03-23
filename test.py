@@ -54,15 +54,15 @@ def main(model_path):
         error = loss_fn(out, train_images)
         train_errors.append(error.item())
 
-    for test_embeddings, test_images in tqdm(test_dataloader):
-        test_embeddings, test_images = test_embeddings.to(device), test_images.to(device)
-        out = model(test_embeddings)
-        error = loss_fn(out, test_images)
-        test_errors.append(error.item())
+    # for test_embeddings, test_images in tqdm(test_dataloader):
+    #     test_embeddings, test_images = test_embeddings.to(device), test_images.to(device)
+    #     out = model(test_embeddings)
+    #     error = loss_fn(out, test_images)
+    #     test_errors.append(error.item())
 
     errors_df = pd.DataFrame({
         "train_error": train_errors,
-        "test_error": test_errors
+        # "test_error": test_errors
     })
     errors_df.to_csv("errors.csv")
 
