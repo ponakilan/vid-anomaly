@@ -26,7 +26,12 @@ class EmbeddingDataset(Dataset):
 
 
 class ImageDataset(Dataset):
-    def __init__(self, root_dir: str, seq_len: int = 10, max_frames: int = 200):
+    def __init__(
+            self, 
+            root_dir: str, 
+            seq_len: int = 10, 
+            max_frames: int = 200
+        ):
         self.root_dir = root_dir
         self.files = sorted(list(os.walk(self.root_dir)), key=lambda x: x[0])[1:]
 
@@ -49,7 +54,12 @@ class ImageDataset(Dataset):
 
         return dir_index, start, end
     
-    def _load_images(self, base_path: str, files: str, shape: tuple[int, int] = (224, 224)):
+    def _load_images(
+            self, 
+            base_path: str, 
+            files: str, 
+            shape: tuple[int, int] = (224, 224)
+        ):
         images = [Image.open(f"{base_path}/{file}").convert('L').convert('RGB') for file in files]
         images_resized = [image.resize(shape) for image in images]
         return images_resized
@@ -64,7 +74,11 @@ class ImageDataset(Dataset):
     
 
 class ImageEmbeddingDataset(Dataset):
-    def __init__(self, image_dataset: ImageDataset, embedding_dataset: EmbeddingDataset):
+    def __init__(
+            self, 
+            image_dataset: ImageDataset, 
+            embedding_dataset: EmbeddingDataset
+        ):
         self.image_dataset = image_dataset
         self.embedding_dataset = embedding_dataset
 
@@ -83,7 +97,12 @@ class EmbeddingGenerator(Dataset):
     """
     Calculates embeddings for a sequence of frames using google/vit-base-patch16-224-in21k.
     """
-    def __init__(self, root_dir: str, seq_len: int = 10, max_frames: int = 200):
+    def __init__(
+            self, 
+            root_dir: str, 
+            seq_len: int = 10, 
+            max_frames: int = 200
+        ):
         self.root_dir = root_dir
         self.files = sorted(list(os.walk(self.root_dir)), key=lambda x: x[0])[1:]
 
@@ -110,7 +129,12 @@ class EmbeddingGenerator(Dataset):
 
         return dir_index, start, end
 
-    def _load_images(self, base_path: str, files: str, shape: tuple[int, int] = (224, 224)):
+    def _load_images(
+            self, 
+            base_path: str, 
+            files: str, 
+            shape: tuple[int, int] = (224, 224)
+        ):
         images = [Image.open(f"{base_path}/{file}").convert('L').convert('RGB') for file in files]
         images_resized = [image.resize(shape) for image in images]
         return images_resized
