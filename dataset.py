@@ -6,6 +6,7 @@ import torch
 from torchvision import transforms
 from torch.utils.data import Dataset
 
+import PIL
 from PIL import Image
 from transformers import ViTImageProcessor, ViTModel
 
@@ -61,7 +62,15 @@ class ImageDataset(Dataset):
             files: str, 
             shape: tuple[int, int] = (224, 224)
         ):
-        images = [Image.open(f"{base_path}/{file}").convert('L').convert('RGB') for file in files]
+
+        images = []
+        for file in files:
+            try:
+                image = Image.open(f"{base_path}/{file}").convert('L').convert('RGB')
+            except OSError:
+                image = PIL.Image.new(mode = "RGB", size = (224, 224), color = (0, 0, 0))
+            images.append(image)
+
         images_resized = [image.resize(shape) for image in images]
         return images_resized
 
@@ -137,7 +146,15 @@ class EmbeddingGenerator(Dataset):
             files: str, 
             shape: tuple[int, int] = (224, 224)
         ):
-        images = [Image.open(f"{base_path}/{file}").convert('L').convert('RGB') for file in files]
+        
+        images = []
+        for file in files:
+            try:
+                image = PIL.Image.new(mode = "RGB", size = (224, 224), color = (0, 0, 0))
+            except OSError:
+                image = torch.zeros(3, 224, 224)
+            images.append(image)
+
         images_resized = [image.resize(shape) for image in images]
         return images_resized
 
