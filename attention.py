@@ -3,12 +3,12 @@ import torch.nn.functional as F
 from torch import nn
 
 class MultiScaleTemporalAttention(nn.Module):
-    def __init__(self, embed_dim, num_heads, scales=[2, 4, 8, 10]):
+    def __init__(self, embed_dim, num_heads, device, scales=[2, 4, 8, 10]):
         super().__init__()
         self.scales = scales
         self.attention_layers = nn.ModuleList([
             nn.MultiheadAttention(embed_dim, num_heads) for _ in scales
-        ])
+        ]).to(device)
     
     def forward(self, x):
         B, T, D = x.shape

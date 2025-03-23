@@ -10,6 +10,7 @@ class FrameReconstructionModel(nn.Module):
         self.attn = MultiScaleTemporalAttention(
             embed_dim=768,
             num_heads=4,
+            device=device,
             scales=[10, 20, 40, 50]
         ).to(device)
         self.reconstructor = CNNFrameReconstructor().to(device)
