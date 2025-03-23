@@ -17,7 +17,7 @@ image_dataset = ImageDataset(
     seq_len=seq_len
 )
 embedding_dataset = EmbeddingDataset(
-    embeddings_path="embeddings/embeddings_50.pkl"
+    embeddings_path="vid-anomaly/embeddings/embeddings_50.pkl"
 )
 
 dataset = ImageEmbeddingDataset(
