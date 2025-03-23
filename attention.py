@@ -7,8 +7,8 @@ class MultiScaleTemporalAttention(nn.Module):
         super().__init__()
         self.scales = scales
         self.attention_layers = nn.ModuleList([
-            nn.MultiheadAttention(embed_dim, num_heads) for _ in scales
-        ]).to(device)
+            nn.MultiheadAttention(embed_dim, num_heads).to(device) for _ in scales
+        ])
     
     def forward(self, x):
         B, T, D = x.shape
