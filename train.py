@@ -60,7 +60,7 @@ def train_one_epoch():
 
     return last_loss
 
-for epoch in range(sys.argv[1]):
+for epoch in range(int(sys.argv[1])):
     print(f"Epoch {epoch}")
     avg_loss = train_one_epoch()
 
