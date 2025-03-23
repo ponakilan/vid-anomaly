@@ -1,3 +1,5 @@
+import sys
+
 import torch
 from tqdm import tqdm
 from torch.utils.data import DataLoader
@@ -39,7 +41,7 @@ def train_one_epoch():
 
     for i, data in tqdm(enumerate(dataloader)):
         inputs, labels = data
-        input, labels = inputs.to(device), labels.to(device)
+        inputs, labels = inputs.to(device), labels.to(device)
 
         optimizer.zero_grad()
 
@@ -51,14 +53,14 @@ def train_one_epoch():
         optimizer.step()
 
         running_loss += loss.item()
-        if i % 10 == 9:
-            last_loss = running_loss / 1000 # loss per batch
+        if i % 5 == 4:
+            last_loss = running_loss / 5
             print('  batch {} loss: {}'.format(i + 1, last_loss))
             running_loss = 0.
 
     return last_loss
 
-for epoch in range(10):
+for epoch in range(sys.argv[1]):
     print(f"Epoch {epoch}")
     avg_loss = train_one_epoch()
 
