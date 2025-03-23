@@ -5,9 +5,9 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 
 from models import FrameReconstructionModel
-from dataset import ImageDataset, EmbeddingDataset, ImageEmbeddingDataset
+from dataset import ImageDataset, ImageEmbeddingDataset, EmbeddingGenerator
 
-root_dir = "data/UCSDped1/Train"
+root_dir = sys.argv[2]
 seq_len = 50
 
 device = torch.device(
@@ -18,18 +18,20 @@ image_dataset = ImageDataset(
     root_dir=root_dir,
     seq_len=seq_len
 )
-embedding_dataset = EmbeddingDataset(
-    embeddings_path="vid-anomaly/embeddings/embeddings_50.pkl"
+embedding_dataset = EmbeddingGenerator(
+    root_dir=root_dir,
+    seq_len=seq_len
 )
-
 dataset = ImageEmbeddingDataset(
     image_dataset=image_dataset,
     embedding_dataset=embedding_dataset
 )
 dataloader = DataLoader(dataset, batch_size=12)
 
-
 model = FrameReconstructionModel(device=device).to(device)
+
+if len(sys.argv) > 3:
+    model = torch.load(open(sys.argv[2], "rb"), weights_only=False).to(device)
 
 loss_fn = torch.nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
