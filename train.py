@@ -51,7 +51,7 @@ def train_one_epoch():
         optimizer.step()
 
         running_loss += loss.item()
-        if i % 1000 == 999:
+        if i % 10 == 9:
             last_loss = running_loss / 1000 # loss per batch
             print('  batch {} loss: {}'.format(i + 1, last_loss))
             running_loss = 0.
@@ -61,3 +61,5 @@ def train_one_epoch():
 for epoch in range(10):
     print(f"Epoch {epoch}")
     avg_loss = train_one_epoch()
+
+torch.save(model.cpu(), open("model.pkl", "wb"))
