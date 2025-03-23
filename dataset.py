@@ -106,6 +106,7 @@ class EmbeddingGenerator(Dataset):
         ):
         self.root_dir = root_dir
         self.files = sorted(list(os.walk(self.root_dir)), key=lambda x: x[0])[1:]
+        self.files = [directory for directory in self.files if "_gt" not in directory[0]]
 
         self.files = [list(directory) for directory in self.files]
         for i in range(len(self.files)):
