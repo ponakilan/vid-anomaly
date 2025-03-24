@@ -5,7 +5,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 
 from models import StaModel
-from dataset import ImageDataset, ImageEmbeddingDataset, EmbeddingGenerator, EmbeddingDataset
+from dataset import ImageDataset, ImageEmbeddingDataset, EmbeddingDataset
 
 root_dir = sys.argv[2]
 seq_len = 50
@@ -25,7 +25,7 @@ dataset = ImageEmbeddingDataset(
     image_dataset=image_dataset,
     embedding_dataset=embedding_dataset
 )
-dataloader = DataLoader(dataset, batch_size=3)
+dataloader = DataLoader(dataset, batch_size=12)
 
 model = StaModel(device=device).to(device)
 
