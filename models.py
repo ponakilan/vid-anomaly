@@ -23,7 +23,7 @@ class FrameReconstructionModel(nn.Module):
 
 class StaModel(nn.Module):
     def __init__(self, device):
-        super(FrameReconstructionModel, self).__init__()
+        super(StaModel, self).__init__()
         self.attn = SpatioTemporalAttention(
             embed_dim=768,
         ).to(device)
