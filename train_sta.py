@@ -5,7 +5,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 
 from models import StaModel
-from dataset import ImageDataset, ImageEmbeddingDataset, EmbeddingGenerator
+from dataset import ImageDataset, ImageEmbeddingDataset, EmbeddingGenerator, EmbeddingDataset
 
 root_dir = sys.argv[2]
 seq_len = 50
@@ -18,9 +18,8 @@ image_dataset = ImageDataset(
     root_dir=root_dir,
     seq_len=seq_len
 )
-embedding_dataset = EmbeddingGenerator(
-    root_dir=root_dir,
-    seq_len=seq_len
+embedding_dataset = EmbeddingDataset(
+    embeddings_path="vid-anomaly/embeddings/embeddings_50.pkl"
 )
 dataset = ImageEmbeddingDataset(
     image_dataset=image_dataset,
