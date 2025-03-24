@@ -26,7 +26,7 @@ dataset = ImageEmbeddingDataset(
     image_dataset=image_dataset,
     embedding_dataset=embedding_dataset
 )
-dataloader = DataLoader(dataset, batch_size=5)
+dataloader = DataLoader(dataset, batch_size=3)
 
 model = StaModel(device=device).to(device)
 
