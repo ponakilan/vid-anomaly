@@ -1,4 +1,4 @@
-from attention import MultiScaleTemporalAttention
+from attention import MultiScaleTemporalAttention, SpatioTemporalAttention
 from reconstructor import CNNFrameReconstructor
 
 from torch import nn
@@ -18,5 +18,19 @@ class FrameReconstructionModel(nn.Module):
     def forward(self, x):
         x = self.attn(x)
         x = self.reconstructor(x)
-        return x.float()   
+        return x.float()
+
+
+class StaModel(nn.Module):
+    def __init__(self, device):
+        super(FrameReconstructionModel, self).__init__()
+        self.attn = SpatioTemporalAttention(
+            embed_dim=768,
+        ).to(device)
+        self.reconstructor = CNNFrameReconstructor().to(device)
+
+    def forward(self, x):
+        x = self.attn(x)
+        x = self.reconstructor(x)
+        return x.float()
     
