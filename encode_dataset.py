@@ -23,7 +23,7 @@ def generate_embeddings(root_dir: str, seq_len: int, save_location: str):
 
 if __name__ == "__main__":
     root_dir = sys.argv[1]
-    seq_len = sys.argv[2]
+    seq_len = int(sys.argv[2])
     save_location = sys.argv[3]
 
     generate_embeddings(root_dir, seq_len, save_location)
