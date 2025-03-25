@@ -42,7 +42,7 @@ def main(root_dir_train, root_dir_test, embedding_file_train, embedding_file_tes
     model = FrameReconstructionModel(device=device).to(device)
 
     loss_fn = torch.nn.MSELoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
 
 
     def train_one_epoch():
