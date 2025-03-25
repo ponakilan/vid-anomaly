@@ -70,4 +70,4 @@ if __name__ == "__main__":
     epochs = int(sys.argv[4])
     save_file = sys.argv[5]
 
-    main(root_dir, embedding_file, epochs, save_file)
+    main(root_dir, embedding_file, seq_len, epochs, save_file)
