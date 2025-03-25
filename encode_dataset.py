@@ -8,7 +8,8 @@ from dataset import EmbeddingGenerator
 def generate_embeddings(root_dir: str, seq_len: int, save_location: str):
     dataset = EmbeddingGenerator(
         root_dir=root_dir,
-        seq_len=seq_len
+        seq_len=seq_len,
+        max_frames=120
     )
 
     embeddings = []
