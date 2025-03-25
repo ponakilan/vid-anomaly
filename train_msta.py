@@ -37,7 +37,7 @@ def main(root_dir_train, root_dir_test, embedding_file_train, embedding_file_tes
         image_dataset=image_dataset_test,
         embedding_dataset=embedding_dataset_test
     )
-    dataloader_test = DataLoader(dataset_test, batch_size=2)
+    dataloader_test = DataLoader(dataset_test, batch_size=4)
 
     model = FrameReconstructionModel(device=device).to(device)
 
