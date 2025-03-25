@@ -3,7 +3,7 @@ import torch
 from tqdm import tqdm
 import pandas as pd
 
-from core.dataset import EmbeddingGenerator, ImageDataset, ImageEmbeddingDataset
+from core.dataset import EmbeddingDataset, ImageDataset, ImageEmbeddingDataset
 from core.models import FrameReconstructionModel
 
 train_dir = "data/UCSDped1/Train"
@@ -11,35 +11,20 @@ test_dir = "data/UCSDped1/Test"
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# embedding_dataset_train = EmbeddingGenerator(
-#     root_dir=train_dir,
-#     seq_len=50
-# )
-# image_dataset_train = ImageDataset(
-#     root_dir=train_dir,
-#     seq_len=50
-# )
-# train_dataset = ImageEmbeddingDataset(
-#     image_dataset=image_dataset_train,
-#     embedding_dataset=embedding_dataset_train
-# )
-# train_dataloader = torch.utils.data.DataLoader(train_dataset)
+def main(model_path, embeddings_path, output_file):
+    embedding_dataset_test = EmbeddingDataset(
+        embeddings_path=embeddings_path
+    )
+    image_dataset_test = ImageDataset(
+        root_dir=test_dir,
+        seq_len=50
+    )
+    test_dataset = ImageEmbeddingDataset(
+        image_dataset=image_dataset_test,
+        embedding_dataset=embedding_dataset_test
+    )
+    test_dataloader = torch.utils.data.DataLoader(test_dataset)
 
-embedding_dataset_test = EmbeddingGenerator(
-    root_dir=test_dir,
-    seq_len=50
-)
-image_dataset_test = ImageDataset(
-    root_dir=test_dir,
-    seq_len=50
-)
-test_dataset = ImageEmbeddingDataset(
-    image_dataset=image_dataset_test,
-    embedding_dataset=embedding_dataset_test
-)
-test_dataloader = torch.utils.data.DataLoader(test_dataset)
-
-def main(model_path, output_file):
     model = torch.load(open(model_path, "rb"), weights_only=False).to(device)
     model.eval()
 
@@ -65,6 +50,7 @@ def main(model_path, output_file):
 if __name__ == "__main__":
     args = sys.argv
     model_path = args[1]
-    output_file = args[2]
-    main(model_path, output_file)
+    embeddings_path = args[2]
+    output_file = args[3]
+    main(model_path, embeddings_path, output_file)
     
