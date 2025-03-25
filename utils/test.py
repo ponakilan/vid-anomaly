@@ -3,8 +3,8 @@ import torch
 from tqdm import tqdm
 import pandas as pd
 
-from dataset import EmbeddingGenerator, ImageDataset, ImageEmbeddingDataset
-from models import FrameReconstructionModel
+from core.dataset import EmbeddingGenerator, ImageDataset, ImageEmbeddingDataset
+from core.models import FrameReconstructionModel
 
 train_dir = "data/UCSDped1/Train"
 test_dir = "data/UCSDped1/Test"
@@ -39,20 +39,16 @@ test_dataset = ImageEmbeddingDataset(
 )
 test_dataloader = torch.utils.data.DataLoader(test_dataset)
 
-def main(model_path):
+def main(model_path, output_file):
     model = torch.load(open(model_path, "rb"), weights_only=False).to(device)
     model.eval()
 
     loss_fn = torch.nn.MSELoss()
 
-    # train_errors = []
     test_errors = []
-
-    # for train_embeddings, train_images in tqdm(train_dataloader):
-    #     train_embeddings, train_images = train_embeddings.to(device), train_images.to(device)
-    #     out = model(train_embeddings)
-    #     error = loss_fn(out, train_images)
-    #     train_errors.append(error.item())
+    indices = []
+    for i in range(1, len(test_dataloader)//4 + 1):
+        indices.extend([i, i, i, i])
 
     for test_embeddings, test_images in tqdm(test_dataloader):
         test_embeddings, test_images = test_embeddings.to(device), test_images.to(device)
@@ -61,13 +57,14 @@ def main(model_path):
         test_errors.append(error.item())
 
     errors_df = pd.DataFrame({
-        # "train_error": train_errors,
-        "test_error": test_errors
+        "test_error": test_errors,
+        "sequence_number": indices 
     })
-    errors_df.to_csv("test_errors.csv")
+    errors_df.to_csv(output_file)
 
 if __name__ == "__main__":
     args = sys.argv
     model_path = args[1]
-    main(model_path)
+    output_file = args[2]
+    main(model_path, output_file)
     
