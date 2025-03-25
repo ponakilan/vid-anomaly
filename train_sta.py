@@ -4,8 +4,8 @@ import torch
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 
-from models import StaModel
-from dataset import ImageDataset, ImageEmbeddingDataset, EmbeddingDataset
+from core.models import StaModel
+from core.dataset import ImageDataset, ImageEmbeddingDataset, EmbeddingDataset
 
 root_dir = sys.argv[2]
 seq_len = 50

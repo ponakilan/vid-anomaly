@@ -2,7 +2,7 @@ import sys
 
 import tqdm
 import pickle
-from dataset import EmbeddingGenerator
+from core.dataset import EmbeddingGenerator
 
 
 def generate_embeddings(root_dir: str, seq_len: int, save_location: str):

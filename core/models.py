@@ -1,5 +1,5 @@
-from attention import MultiScaleTemporalAttention, SpatioTemporalAttention
-from reconstructor import CNNFrameReconstructor
+from core.attention import MultiScaleTemporalAttention, SpatioTemporalAttention
+from core.reconstructor import CNNFrameReconstructor
 
 from torch import nn
 
