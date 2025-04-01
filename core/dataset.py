@@ -119,7 +119,7 @@ class EmbeddingGenerator(Dataset):
 
         self.files = [list(directory) for directory in self.files]
         for i in range(len(self.files)):
-            self.files[i][2] = sorted([file for file in self.files[i][2] if file[-3:] == "tif"])
+            self.files[i][2] = sorted([file for file in self.files[i][2] if file[-3:] == "tif" or file[-3:] == "jpg"])
 
         self.seq_len = seq_len
         self.max_frames = max_frames
