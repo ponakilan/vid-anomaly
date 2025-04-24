@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import json
 import torch
@@ -36,7 +38,7 @@ def main(args):
             image_dataset_train = ImageDataset(root_dir=dataset["root_dir_train"], seq_len=dataset["seq_len_train"])
             embedding_dataset_train = EmbeddingDataset(embeddings_path=dataset["embedding_file_train"])
             dataset_train = ImageEmbeddingDataset(image_dataset=image_dataset_train, embedding_dataset=embedding_dataset_train)
-            dataloader_train = DataLoader(dataset_train, batch_size=12)
+            dataloader_train = DataLoader(dataset_train, batch_size=40)
             avg_loss = train_one_epoch(dataloader_train)
             print(f"Dataset loss: {avg_loss:.6f}")
 

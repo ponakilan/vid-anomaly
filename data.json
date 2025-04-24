@@ -1,0 +1,9 @@
+{
+"epochs": 10,
+"datasets": [{
+  "root_dir_train": "data/UCSDped1/Train",
+  "seq_len_train": 50,
+  "embedding_file_train": "embeddings/UCSDped1/Train/embeddings_50.pkl"
+}],
+"save_file": "model.pkl"
+}
