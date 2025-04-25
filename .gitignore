@@ -1,8 +1,7 @@
 data/
 **__pycache__
 .venv
-models/
-*.avi
 weights/
+*.avi
 **/.ipynb_checkpoints/
 .idea/

@@ -11,3 +11,4 @@ timm
 pillow
 tqdm
 numpy
+pyyaml
