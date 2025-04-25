@@ -9,6 +9,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data import random_split
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 
 from utils.general import validate
 from utils.ddp import setup, cleanup
@@ -46,10 +47,14 @@ else:
     world_size = available_gpus
     gpu_ids = list(range(world_size))
 
+
 def run_training(rank, wrld_size, train_ds, valid_ds):
     """Run training on a single process"""
     logger.info(f"Setting up distributed environment for GPU {rank}")
     setup(rank, wrld_size)
+
+    if rank == 0:
+        tb_writer = SummaryWriter(log_dir=os.path.join('runs', configs.get('RUN_NAME', 'frame_predictor')))
 
     logger.info(f"Creating dataloaders for GPU {rank}")
     train_sampler = DistributedSampler(
@@ -83,8 +88,12 @@ def run_training(rank, wrld_size, train_ds, valid_ds):
     )
 
     logger.info(f"Preparing model for distributed training in GPU {rank}")
-    model = FramePredictor(mae_backbone=configs["MAE_BACKBONE"]).cuda(rank)
+    model = FramePredictor(mae_backbone=configs["MAE_BACKBONE"])
 
+    if os.path.exists(configs["CHECKPOINT_NAME"]):
+        logger.info(f"Resuming training from checkpoint: {configs['CHECKPOINT_NAME']}")
+        model.load_state_dict(torch.load(configs["CHECKPOINT_NAME"]))
+    model = model.cuda(rank)
     model = DDP(model, device_ids=[rank])
 
     criterion = torch.nn.MSELoss()
@@ -104,6 +113,12 @@ def run_training(rank, wrld_size, train_ds, valid_ds):
         val_loss = validate(model, val_loader, criterion, rank)
 
         if rank == 0:
+            current_lr = optimizer.param_groups[0]['lr']
+
+            tb_writer.add_scalar('Loss/train', train_loss, epoch)
+            tb_writer.add_scalar('Loss/validation', val_loss, epoch)
+            tb_writer.add_scalar('Learning_rate', current_lr, epoch)
+
             print(f"Epoch {epoch + 1}/{configs['EPOCHS']}")
             print(f"Train Loss: {train_loss:.6f}")
             print(f"Val Loss: {val_loss:.6f}")
@@ -112,10 +127,15 @@ def run_training(rank, wrld_size, train_ds, valid_ds):
                 best_val_loss = val_loss
                 torch.save(model.module.state_dict(), configs["CHECKPOINT_NAME"])
                 print(f"New best model saved with validation loss: {best_val_loss:.6f}")
+                tb_writer.add_scalar('Best_val_loss', best_val_loss, epoch)
 
         lr_scheduler.step(val_loss)
 
+    if rank == 0:
+        tb_writer.close()
+
     cleanup()
+
 
 def main():
     if not torch.cuda.is_available():

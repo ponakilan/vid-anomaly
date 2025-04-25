@@ -5,3 +5,4 @@ weights/
 *.avi
 **/.ipynb_checkpoints/
 .idea/
+runs/
