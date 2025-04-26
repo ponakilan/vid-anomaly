@@ -5,16 +5,16 @@ import argparse
 
 import torch
 import torch.multiprocessing as mp
+from torch.utils.data import DataLoader
+from torch.utils.data import random_split
+from torch.utils.tensorboard import SummaryWriter
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.utils.data.distributed import DistributedSampler
-from torch.utils.data import random_split
-from torch.utils.data import DataLoader
-from torch.utils.tensorboard import SummaryWriter
 
 from utils.general import validate
 from utils.ddp import setup, cleanup
-from utils.train import train_one_epoch
 from detector.model import FramePredictor
+from detector.train import train_one_epoch
 from detector.dataset import SequenceDataset
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
