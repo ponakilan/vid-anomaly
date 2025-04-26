@@ -119,7 +119,7 @@ def run_training(rank, wrld_size, train_ds, valid_ds):
             labels_path=configs["TEST_LABELS"],
             model=model,
             seq_len=configs["SEQ_LEN"],
-            image_shape=configs["IMAGE_SHAPE"]
+            image_shape=configs["IMAGE_TENSOR_SHAPE"]
         )
 
         if rank == 0:
