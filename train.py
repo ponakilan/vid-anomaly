@@ -55,6 +55,8 @@ def run_training(rank, wrld_size, train_ds, valid_ds):
 
     if rank == 0:
         tb_writer = SummaryWriter(log_dir=os.path.join('runs', configs.get('RUN_NAME', 'frame_predictor')))
+        config_text = yaml.dump(configs, default_flow_style=False)
+        tb_writer.add_text("Configuration", f"```yaml\n{config_text}\n```", global_step=0)
 
     logger.info(f"Creating dataloaders for GPU {rank}")
     train_sampler = DistributedSampler(
