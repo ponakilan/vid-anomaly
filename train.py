@@ -16,6 +16,7 @@ from utils.ddp import setup, cleanup
 from detector.model import FramePredictor
 from detector.train import train_one_epoch
 from detector.dataset import SequenceDataset
+from detector.test import test_with_reconstruction
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -113,17 +114,26 @@ def run_training(rank, wrld_size, train_ds, valid_ds):
 
         train_loss = train_one_epoch(model, train_loader, optimizer, criterion, rank)
         val_loss = validate(model, val_loader, criterion, rank)
+        test_accuracy = test_with_reconstruction(
+            root_dir=configs["TEST_ROOT_DIR"],
+            labels_path=configs["TEST_LABELS"],
+            model=model,
+            seq_len=configs["SEQ_LEN"],
+            image_shape=configs["IMAGE_SHAPE"]
+        )
 
         if rank == 0:
             current_lr = optimizer.param_groups[0]['lr']
 
             tb_writer.add_scalar('Loss/train', train_loss, epoch)
             tb_writer.add_scalar('Loss/validation', val_loss, epoch)
+            tb_writer.add_scalar('Accuracy', test_accuracy, epoch)
             tb_writer.add_scalar('Learning_rate', current_lr, epoch)
 
             print(f"Epoch {epoch + 1}/{configs['EPOCHS']}")
             print(f"Train Loss: {train_loss:.6f}")
             print(f"Val Loss: {val_loss:.6f}")
+            print(f"Accuracy: {test_accuracy:.6f}")
 
             if val_loss < best_val_loss:
                 best_val_loss = val_loss

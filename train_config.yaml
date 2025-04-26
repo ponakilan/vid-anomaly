@@ -1,10 +1,12 @@
-ROOT_DIR: "data/IPAD/R02/training/frames"
+ROOT_DIR: "data/IPAD/R01/training/frames"
 IMAGE_TENSOR_SHAPE: [3, 224, 224]
 MAE_BACKBONE: "OpenGVLab/VideoMAEv2-Large"
 SEQ_LEN: 16
 BATCH_SIZE: 16
 DATASET_SHUFFLE: true
 EPOCHS: 30
-LEARNING_RATE: 0.01
-CHECKPOINT_NAME: "weights/IPAD_R02.pth"
-RUN_NAME: "IPAD_R02_Resume"
+LEARNING_RATE: 0.001
+CHECKPOINT_NAME: "weights/IPAD_R01.pth"
+RUN_NAME: "IPAD_R01_Resume"
+TEST_ROOT_DIR: "data/IPAD/R01/testing/frames"
+TEST_LABELS: "data/IPAD/R01/test_label"

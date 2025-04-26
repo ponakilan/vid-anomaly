@@ -12,3 +12,4 @@ pillow
 tqdm
 numpy
 pyyaml
+scikit-learn

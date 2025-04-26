@@ -1,10 +1,9 @@
 import torch
-import pandas as pd
 from tqdm.auto import tqdm
 from sklearn.metrics import accuracy_score
 
-from dataset import TestFrameDataset
-from model import FramePredictor
+from .dataset import TestFrameDataset
+from .model import FramePredictor
 
 
 def scores_to_labels(scores: list, threshold: int):
