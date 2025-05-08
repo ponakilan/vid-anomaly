@@ -2,7 +2,7 @@ import torch.nn as nn
 from transformers import VideoMAEImageProcessor, AutoModel, AutoConfig
 
 class CNNFrameReconstructor(nn.Module):
-    def __init__(self, embed_dim=1024, feature_dim=512, out_channels=3, img_size=224):
+    def __init__(self, embed_dim=1280, feature_dim=512, out_channels=3, img_size=224):
         super(CNNFrameReconstructor, self).__init__()
         self.img_size = img_size
         self.feature_dim = feature_dim
